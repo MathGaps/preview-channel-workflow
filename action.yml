@@ -26,8 +26,8 @@ runs:
     - uses: actions/checkout@v2
     - uses: subosito/flutter-action@v2
       with:
-        flutter-version: "${{ inputs.flutter-version }}"
-        channel: "${{ inputs.flutter-version }}"
+        flutter-version: ${{ inputs.flutter-version }}
+        channel: ${{ inputs.flutter-version }}
         cache: true
         cache-key: flutter
         cache-path: ${{ runner.tool_cache }}/flutter
@@ -39,9 +39,9 @@ runs:
         flutter build web --release
     - uses: FirebaseExtended/action-hosting-deploy@v0
       with:
-        repoToken: "${{ secrets.GITHUB_TOKEN }}"
-        projectId: "${{ inputs.firebase-project-id }}"
-        entryPoint: $j{ inputs.entry-point }}
-        firebaseServiceAccount: "${{ inputs.firebase-service-account }}"
-        target: "${{ inputs.target }}"
+        repoToken: ${{ secrets.GITHUB_TOKEN }}
+        projectId: ${{ inputs.firebase-project-id }}
+        entryPoint: ${{ inputs.entry-point }}
+        firebaseServiceAccount: ${{ inputs.firebase-service-account }}
+        target: ${{ inputs.target }}
         expires: 30d

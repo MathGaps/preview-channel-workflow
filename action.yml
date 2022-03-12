@@ -1,0 +1,47 @@
+name: 'Deploy to Preview Channel'
+description: 'Compiles and deploys a Flutter package to a preview-channel.'
+inputs:
+  flutter-version:
+    description: 'The version of Flutter to compile with.'
+    required: true
+  flutter-channel:
+    description: 'The Flutter channel to checkout into.'
+    required: true
+  firebase-service-account:
+    description: 'The Firebase service account to deploy with.'
+    required: true
+  firebase-project-id:
+    description: 'The Firebase project ID.'
+    required: true
+  target:
+    description: 'The target to deploy to.'
+    required: true
+  entry-point:
+    description: 'The directory of the Flutter package to deploy.'
+    default: './'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: "${{ inputs.flutter-version }}"
+        channel: "${{ inputs.flutter-version }}"
+        cache: true
+        cache-key: flutter
+        cache-path: ${{ runner.tool_cache }}/flutter
+    - name: Sync dependencies and compile
+      working-directory: ${{ inputs.entry-point }}
+      shell: bash
+      run: |
+        flutter pub get
+        flutter build web --release
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: "${{ secrets.GITHUB_TOKEN }}"
+        projectId: "${{ inputs.firebase-project-id }}"
+        entryPoint: $j{ inputs.entry-point }}
+        firebaseServiceAccount: "${{ inputs.firebase-service-account }}"
+        target: "${{ inputs.target }}"
+        expires: 30d

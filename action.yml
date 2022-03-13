@@ -33,12 +33,21 @@ runs:
         cache: true
         cache-key: flutter
         cache-path: ${{ runner.tool_cache }}/flutter
-    - name: Sync dependencies and compile
+    - name: Cache dependencies
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.PUB_CACHE }}
+        key: pubcache-${{ hashFiles(format('{0}/pubspec.yaml', inputs.entry-point) }}
+    - name: Install dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
       working-directory: ${{ inputs.entry-point }}
       shell: bash
-      run: |
-        flutter pub get
-        flutter build web --release
+      run: flutter pub get
+    - name: Compile
+      working-directory: ${{ inputs.entry-point }}
+      shell: bash
+      run: flutter build web --release
     - uses: FirebaseExtended/action-hosting-deploy@v0
       with:
         repoToken: ${{ inputs.github-token }}

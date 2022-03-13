@@ -20,6 +20,9 @@ inputs:
     description: 'The directory of the Flutter package to deploy.'
     default: './'
     required: true
+  github-token:
+    description: 'The token to use for commenting on PRs'
+    required: true
 runs:
   using: "composite"
   steps:
@@ -39,7 +42,7 @@ runs:
         flutter build web --release
     - uses: FirebaseExtended/action-hosting-deploy@v0
       with:
-        repoToken: ${{ secrets.GITHUB_TOKEN }}
+        repoToken: ${{ inputs.github-token }}
         projectId: ${{ inputs.firebase-project-id }}
         entryPoint: ${{ inputs.entry-point }}
         firebaseServiceAccount: ${{ inputs.firebase-service-account }}

@@ -18,7 +18,6 @@ inputs:
     required: true
   entry-point:
     description: 'The directory of the Flutter package to deploy.'
-    default: './'
     required: true
   github-token:
     description: 'The token to use for commenting on PRs'
@@ -28,7 +27,8 @@ runs:
   steps:
     - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v2
-      with: flutter-version: ${{ inputs.flutter-version }}
+      with:
+        flutter-version: ${{ inputs.flutter-version }}
         channel: ${{ inputs.flutter-channel }}
         cache: true
         cache-key: flutter

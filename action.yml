@@ -38,7 +38,7 @@ runs:
       uses: actions/cache@v2
       with:
         path: ${{ env.PUB_CACHE }}
-        key: pubcache-${{ hashFiles(format('{0}/pubspec.yaml', inputs.entry-point) }}
+        key: pubcache-${{ hashFiles(format('{0}/pubspec.yaml', inputs.entry-point)) }}
     - name: Install dependencies
       if: steps.cache.outputs.cache-hit != 'true'
       working-directory: ${{ inputs.entry-point }}
